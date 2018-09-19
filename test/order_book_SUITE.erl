@@ -39,8 +39,8 @@ application_stop(App) ->
 book_test(_C) ->
     E = <<"NYSE">>,
     I = <<"btc_usd">>,
-    {ok, _} = order_book_instrument:new(I, #{aggregate => #{store => btc_usd}}),
-    {ok, _} = order_book_exchange:new(E, I, #{store => nyce}),
+    {ok, _} = order_book:new_instrument(I, #{instrument => #{store => btc_usd}}),
+    {ok, _} = order_book:new_exchange(E, I, #{store => nyce}),
 
     ok = add(E, 1, ask, 6354.2, 10),
     [{6354.2, 0, 10}] = read(I),
@@ -90,16 +90,16 @@ book_test(_C) ->
 %%
 
 add(E, I, T, P, Q) ->
-    order_book_exchange:add_order(E, I, T, P, Q).
+    order_book:add_order(E, I, T, P, Q).
 mod(E, I, Q) ->
-    order_book_exchange:modify_order(E, I, Q).
+    order_book:modify_order(E, I, Q).
 del(E, I) ->
-    order_book_exchange:delete_order(E, I).
+    order_book:delete_order(E, I).
 
-read(A) ->
-    read(A, 5).
+read(I) ->
+    read(I, 5).
 
-read(A, T) ->
+read(I, T) ->
     %% This is ugly indeed. Even retries would look better here.
     timer:sleep(T),
-    order_book_aggregate:read(A).
+    order_book:get_book(I).

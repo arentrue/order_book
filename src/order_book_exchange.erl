@@ -129,25 +129,25 @@ handle_call({add_order, Order}, St = #{id := ID, store := Store}, From) ->
         true ->
             finish_update({add_order, Order}, From, St);
         false ->
-            ok = lager:warning("[~p]: attempt to add existing order: ~p", [ID, Order]),
+            ok = lager:warning("Exchange[~p]: attempt to add existing order: ~p", [ID, Order]),
             {reply, {error, duplicate}, St}
     end;
 handle_call({delete_order, OrderID}, St = #{id := ID, store := Store}, From) ->
     case ets:lookup(Store, OrderID) of
         [{OrderID, deleted}] ->
-            ok = lager:warning("[~p]: attempt to delete already deleted order: ~p", [ID, OrderID]),
+            ok = lager:warning("Exchange[~p]: attempt to delete already deleted order: ~p", [ID, OrderID]),
             {reply, {error, deleted}, St};
         [Order] ->
             true = ets:insert(Store, {OrderID, deleted}),
             finish_update({delete_order, order_book_order:from_tuple(Order)}, From, St);
         [] ->
-            ok = lager:warning("[~p]: attempt to delete non existing order: ~p", [ID, OrderID]),
+            ok = lager:warning("Exchange[~p]: attempt to delete non existing order: ~p", [ID, OrderID]),
             {reply, {error, notfound}, St}
     end;
 handle_call({modify_order, {OrderID, NewQty}}, St = #{id := ID, store := Store}, From) ->
     case ets:lookup(Store, OrderID) of
         [{OrderID, deleted}] ->
-            ok = lager:warning("[~p]: attempt to modify deleted order: ~p", [ID, OrderID]),
+            ok = lager:warning("Exchange[~p]: attempt to modify deleted order: ~p", [ID, OrderID]),
             {reply, {error, deleted}, St};
         [Order0] ->
             Order = order_book_order:from_tuple(Order0),
@@ -155,20 +155,20 @@ handle_call({modify_order, {OrderID, NewQty}}, St = #{id := ID, store := Store},
             true = ets:insert(Store, Modified),
             finish_update({modify_order, {Order, NewQty}}, From, St);
         [] ->
-            ok = lager:warning("[~p]: attempt to modify non existing order: ~p", [ID, OrderID]),
+            ok = lager:warning("Exchange[~p]: attempt to modify non existing order: ~p", [ID, OrderID]),
             {reply, {error, notfound}, St}
     end.
 
 finish_update(Update, From, St = #{id := ID, instrument := Instrument}) ->
     ok = order_book_server:reply(From, ok),
-    ok = update_aggregate(Update, Instrument, ID),
+    ok = update_instrument(Update, Instrument, ID),
     St.
 
-update_aggregate({add_order, Order}, Instrument, Exchange) ->
-    order_book_aggregate:update(Instrument, Order, Exchange);
-update_aggregate({delete_order, Order}, Instrument, Exchange) ->
+update_instrument({add_order, Order}, Instrument, Exchange) ->
+    order_book_instrument:update(Instrument, Order, Exchange);
+update_instrument({delete_order, Order}, Instrument, Exchange) ->
     Qty = order_book_order:qty(Order),
-    order_book_aggregate:update(Instrument, order_book_order:modify(-Qty, Order), Exchange);
-update_aggregate({modify_order, {Order, NewQty}}, Instrument, Exchange) ->
+    order_book_instrument:update(Instrument, order_book_order:modify(-Qty, Order), Exchange);
+update_instrument({modify_order, {Order, NewQty}}, Instrument, Exchange) ->
     Qty = order_book_order:qty(Order),
-    order_book_aggregate:update(Instrument, order_book_order:modify(NewQty - Qty, Order), Exchange).
+    order_book_instrument:update(Instrument, order_book_order:modify(NewQty - Qty, Order), Exchange).

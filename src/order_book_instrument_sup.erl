@@ -28,13 +28,13 @@ get_ref(ID) ->
 -spec init({id(), init_args()}) ->
     {ok, {supervisor:sup_flags(), [supervisor:child_spec()]}}.
 
-init({ID, #{aggregate := Config}}) ->
+init({ID, #{instrument := Config}}) ->
     {ok, {
         #{strategy => rest_for_one},
         [
             #{
-                id      => order_book_aggregate,
-                start   => {order_book_aggregate, start_link, [ID, Config]},
+                id      => order_book_instrument,
+                start   => {order_book_instrument, start_link, [ID, Config]},
                 type    => worker,
                 restart => transient
             },
