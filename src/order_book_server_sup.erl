@@ -1,5 +1,10 @@
 -module(order_book_server_sup).
 
+%% TODO
+%%   - Change it to order_book_exchange_sup and move all child_spec and supervisor:start_child
+%%     related staff from order_book_server to order_book_exchange.
+%%
+
 %% API
 -export([start_link/2]).
 

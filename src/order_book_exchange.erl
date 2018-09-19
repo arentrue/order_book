@@ -5,6 +5,9 @@
 %%     for all the ets tables. This will allow to keep states between
 %%     gen server restarts.
 %%
+%%   - Add get_orders/1, get_order/2 api functions similar
+%%     to order_book_instrument:get_book/1.
+%%
 %%   - Add support for batch requests (e.g. init a table with a batch).
 %%
 

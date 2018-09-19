@@ -3,6 +3,10 @@
 %% TODO
 %%   - Move gproc releated details to order_book_reg module.
 %%
+%%   - Get rid of store config in the interface.
+%%     Use binary_to_atom(ID) for table name instead. This applies
+%%     to the order_book_exchange as well.
+%%
 
 %% API
 -export([start_link/2]).
