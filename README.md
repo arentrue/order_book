@@ -1,6 +1,6 @@
 # Order Book
 
-An aggregated Order Book in Erlang, which maintains total _Qtys_ for each _Price_ level for _bid_ and _ask_ sides. The events coming (somehow) from an Exchange:
+An aggregated Order Book in Erlang, which maintains total _Qtys_ for each _Price level_ for _bid_ and _ask_ sides. The events coming (somehow) from an exchange:
 
 ```erlang
 {new_order, OrderID :: integer(), bid | ask, Price :: number(), Qty :: integer()} ,
@@ -8,9 +8,11 @@ An aggregated Order Book in Erlang, which maintains total _Qtys_ for each _Price
 {modify_order, OrderID :: integer(), NewQty :: integer() }
 ```
 
-> Note: implemented in Erlang 21.
+It is assumed, that the exchange is responsible for matching orders and the results are reflected in the events to the Order Book (above).
 
 ## Hints
+
+> Note: implemented in Erlang 21.
 
 - compile: `make compile`
 
@@ -21,3 +23,12 @@ An aggregated Order Book in Erlang, which maintains total _Qtys_ for each _Price
 - lint (requires elvis): `make lint`
 
 - test `make test`
+
+- release `make release`
+
+## TODO
+
+- Add ability to get Order Book state for any moment in the past.
+- Add CI builds via wercker or travis.
+- Add REST interface to the application.
+- Dockerize.
