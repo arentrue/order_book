@@ -1,0 +1,18 @@
+{application, order_book,
+ [{description, "An aggregated order book service"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {mod, { order_book_app, []}},
+  {applications,
+   [kernel,
+    stdlib,
+    gproc,
+    lager
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {maintainers, []},
+  {licenses, ["Apache 2.0"]},
+  {links, []}
+ ]}.
