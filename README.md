@@ -33,6 +33,13 @@ It is assumed, that the exchange is responsible for matching orders and the resu
 - Add REST interface to the application.
 - Dockerize.
 
+### Optimization
+
+Since _order_book_instrument_ server is a natural bottleneck for many _order_book_exchange_ servers it can be:
+
+1. Split into 2 servers: for _bid_ and _ask_ orders. The cross, if happens, should not be huge and expensive to merge.
+2. Sharded into a number of servers, each responsible for handling it's own book depth range. The pool of those servers can dinamically follow the moving top of the book and changes in book depth.
+
 ### Provide Order Book state for any timestamp
 
 __Implementation sketch__
