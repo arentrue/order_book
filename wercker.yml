@@ -4,7 +4,12 @@ box:
 
 dev:
   steps:
-  - internal/shell
+  - internal/shell:
+    code: |
+      if [ -n "$CI_BUILD_CMD" ]; then
+      eval "$CI_BUILD_CMD"
+      exit $?;
+      fi
 
 build:
   steps:
