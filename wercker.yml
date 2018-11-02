@@ -22,8 +22,9 @@ build:
   - script:
     name: check dialyzer cache
     code: |
-      PLT=$(ls $WERCKER_CACHE_DIR/rebar3*plt)
-      if [ -n $PLT ]; then cp "$WERCKER_CACHE_DIR/rebar3*plt" _build/default/ 2>/dev/null; fi
+      PLT=$(find $WERCKER_CACHE_DIR/ -name "rebar3*plt")
+      echo $PLT
+      if [ -n "$PLT" ]; then cp "$WERCKER_CACHE_DIR/rebar3*plt" _build/default/ 2>/dev/null; fi
   - script:
     name: dialyze
     code: |
