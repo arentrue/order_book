@@ -150,7 +150,7 @@ update_values(Type, Diff, Bid, Ask, {ID, OrderID, Exchange}) ->
         {ok, V} ->
             V;
         {error, V} ->
-            ok = lager:warning(
+            ok = logger:warning(
                 "Instrument[~p]: negative ~p value from exchange ~p order: ~p; value before: ~p",
                 [ID, Type, Exchange, OrderID, get_val(Type, Bid, Ask)]
             ),

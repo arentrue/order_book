@@ -6,8 +6,7 @@
   {applications,
    [kernel,
     stdlib,
-    gproc,
-    lager
+    gproc
    ]},
   {env,[]},
   {modules, []},
