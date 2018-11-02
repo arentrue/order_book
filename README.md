@@ -29,7 +29,6 @@ It is assumed, that the exchange is responsible for matching orders and the resu
 ## TODO
 
 - Add more sophisticated tests with a load profile.
-- Add CI builds via wercker or travis.
 - Add REST interface to the application.
 - Dockerize.
 

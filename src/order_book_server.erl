@@ -215,11 +215,11 @@ handle_supported(info, _, H, Req, Hst) ->
     H:handle_info(Req, Hst).
 
 handle_unsupported(call, Call, From, St = #{id := ID}) ->
-    ok = lager:info("[~p]: unsupported call: ~p from ~p", [ID, Call, From]),
+    ok = logger:info("[~p]: unsupported call: ~p from ~p", [ID, Call, From]),
     {reply, {error, notsupported}, St};
 handle_unsupported(cast, Cast, _, St = #{id := ID}) ->
-    ok = lager:info("[~p]: unexpected cast: ~p", [ID, Cast]),
+    ok = logger:info("[~p]: unexpected cast: ~p", [ID, Cast]),
     {noreply, St};
 handle_unsupported(info, Info, _, St = #{id := ID}) ->
-    ok = lager:info("[~p]: unexpected info: ~p", [ID, Info]),
+    ok = logger:info("[~p]: unexpected info: ~p", [ID, Info]),
     {noreply, St}.
