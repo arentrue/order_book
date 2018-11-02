@@ -9,20 +9,31 @@ dev:
 build:
   steps:
   - script:
+    name: check rebar3 cache
+    code: |
+      if [ -d "$WERCKER_CACHE_DIR/rebar3" ]; then mkdir -p ~/.cache && cp -r "$WERCKER_CACHE_DIR/rebar3" ~/.cache/ ; fi
+  - script:
     name: compile
     code: make compile
-
 #   ToDo
 # - script:
 #   name: lint
 #   code: make compile
-
   - script:
     name: xref
     code: make xref
   - script:
+    name: check dialyzer cache
+    code: |
+      if [ -f "$WERCKER_CACHE_DIR/rebar3_21*_plt" ]; then cp "$WERCKER_CACHE_DIR/rebar3_21*plt" _build/default/ ; fi
+  - script:
     name: dialyze
-    code: make dialyze
+    code:
+      make dialyze
+  - script:
+    name: update dialyzer cache
+    code: |
+      cp _build/default/rebar3*plt "$WERCKER_CACHE_DIR/"
   - script:
     name: test
     code: make test
