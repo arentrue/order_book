@@ -53,4 +53,4 @@ ci_build:
 	wercker build --enable-volumes
 
 ci_%:
-	export X_CI_BUILD_CMD="make $*" && $(MAKE) ci_sh
+	export X_CI_BUILD_CMD="make $*" && $(MAKE) ci_dev
