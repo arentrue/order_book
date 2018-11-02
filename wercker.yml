@@ -22,20 +22,16 @@ build:
   - script:
     name: check dialyzer cache
     code: |
-      rm -rf $WERCKER_CACHE_DIR/*
       PLT=$(find $WERCKER_CACHE_DIR/ -name "rebar3*plt")
-      echo $PLT
-      if [ -n "$PLT" ]; then cp "$WERCKER_CACHE_DIR/rebar3*plt" _build/default/ 2>/dev/null; fi
+      echo "found in cache: $PLT"
+      if [ -n "$PLT" ]; then cp "$PLT" _build/default/; fi
   - script:
     name: dialyze
-    code: |
-      printenv
-      find "$WERCKER_CACHE_DIR"
-      ls -al _build/default/
+    code:
       make dialyze
   - script:
     name: update dialyzer cache
-    code: |
+    code:
       cp _build/default/rebar3*plt "$WERCKER_CACHE_DIR/"
   - script:
     name: test
