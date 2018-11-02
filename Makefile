@@ -39,3 +39,15 @@ clean:
 distclean:
 	$(REBAR) clean -a
 	rm -rf _build
+
+# wercker CI and cli
+
+WERCKER = $(shell which wercker 2>/dev/null)
+X_HOST_HOME = $(HOME)
+export X_HOST_HOME
+
+ci_sh:
+	wercker dev --enable-volumes
+
+ci_build:
+	wercker build --enable-volumes

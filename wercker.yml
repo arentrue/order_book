@@ -1,0 +1,41 @@
+box:
+  id: erlang:21
+  volumes: $HOST_HOME/.cache:/root/.cache
+
+dev:
+  steps:
+  - internal/shell
+
+build:
+  steps:
+  - script:
+    name: compile
+    code:
+      make compile
+#   ToDo
+# - script:
+#   name: lint
+#   code: make compile
+  - script:
+    name: xref
+    code: make xref
+  - script:
+    name: check dialyzer cache
+    code: |
+      PLT=$(find $WERCKER_CACHE_DIR/ -name "rebar3*plt")
+      echo "found in cache: $PLT"
+      if [ -n "$PLT" ]; then cp "$PLT" _build/default/; fi
+  - script:
+    name: dialyze
+    code:
+      make dialyze
+  - script:
+    name: update dialyzer cache
+    code:
+      cp _build/default/rebar3*plt "$WERCKER_CACHE_DIR/"
+  - script:
+    name: test
+    code: make test
+  - script:
+    name: release
+    code: make release
