@@ -10,7 +10,9 @@ build:
   steps:
   - script:
     name: compile
-    code: make compile
+    code: |
+      rm -rf "$WERCKER_CACHE_DIR/rebar*"
+      make compile
 #   ToDo
 # - script:
 #   name: lint
@@ -21,7 +23,7 @@ build:
   - script:
     name: check dialyzer cache
     code: |
-      if [ -f "$WERCKER_CACHE_DIR/rebar3_21.1.1_plt" ]; then cp "$WERCKER_CACHE_DIR/rebar3_21.1.1_plt" _build/default/; fi
+      cp "$WERCKER_CACHE_DIR/rebar3*plt" _build/default/ 2>/dev/null
   - script:
     name: dialyze
     code: |
@@ -32,7 +34,7 @@ build:
   - script:
     name: update dialyzer cache
     code: |
-      cp _build/default/rebar3_21.1.1_plt "$WERCKER_CACHE_DIR/"
+      cp _build/default/rebar3*plt "$WERCKER_CACHE_DIR/"
   - script:
     name: test
     code: make test
